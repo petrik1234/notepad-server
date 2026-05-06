@@ -8,31 +8,14 @@ import threading
 import tkinter as tk
 from tkinter import messagebox, simpledialog
 
-import websockets
+try:
+    import websockets
+except ImportError:
+    print("Устанавливаю библиотеку websockets...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "websockets"])
+    import websockets
 
-CONFIG_FILE = "config.json"
-
-
-def load_config():
-    if not os.path.exists(CONFIG_FILE):
-        cfg = {
-            "_comment_1": "Адрес сервера. Для облака замени на свой URL.",
-            "_comment_2": "Локально:  ws://localhost:8765",
-            "_comment_3": "Облако:    wss://notepad-xxxx.onrender.com",
-            "server_url": "ws://localhost:8765"
-        }
-        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
-            json.dump(cfg, f, ensure_ascii=False, indent=2)
-        return cfg
-    try:
-        with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception:
-        return {"server_url": "ws://localhost:8765"}
-
-
-CONFIG     = load_config()
-SERVER_URL = CONFIG.get("server_url", "ws://localhost:8765")
+SERVER_URL = "wss://notepad-server-gymw.onrender.com"
 
 BG      = "#1c1c28"
 PANEL   = "#14141f"
